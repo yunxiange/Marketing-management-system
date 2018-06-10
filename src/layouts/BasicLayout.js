@@ -1,6 +1,6 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import { Layout, Icon, message } from 'antd';
+import { Layout } from 'antd';
 import DocumentTitle from 'react-document-title';
 import { connect } from 'dva';
 import { Route, Redirect, Switch, routerRedux } from 'dva/router';
@@ -143,13 +143,6 @@ class BasicLayout extends React.PureComponent {
       payload: collapsed,
     });
   };
-  handleNoticeClear = type => {
-    message.success(`清空了${type}`);
-    this.props.dispatch({
-      type: 'global/clearNotices',
-      payload: type,
-    });
-  };
   handleMenuClick = ({ key }) => {
     if (key === 'triggerError') {
       this.props.dispatch(routerRedux.push('/exception/trigger'));
@@ -161,23 +154,8 @@ class BasicLayout extends React.PureComponent {
       });
     }
   };
-  handleNoticeVisibleChange = visible => {
-    if (visible) {
-      this.props.dispatch({
-        type: 'global/fetchNotices',
-      });
-    }
-  };
   render() {
-    const {
-      currentUser,
-      collapsed,
-      fetchingNotices,
-      notices,
-      routerData,
-      match,
-      location,
-    } = this.props;
+    const { currentUser, collapsed, routerData, match, location } = this.props;
     const bashRedirect = this.getBashRedirect();
     const layout = (
       <Layout>
@@ -198,8 +176,6 @@ class BasicLayout extends React.PureComponent {
             <GlobalHeader
               logo={logo}
               currentUser={currentUser}
-              fetchingNotices={fetchingNotices}
-              notices={notices}
               collapsed={collapsed}
               isMobile={this.state.isMobile}
               onNoticeClear={this.handleNoticeClear}
@@ -228,33 +204,7 @@ class BasicLayout extends React.PureComponent {
             </Switch>
           </Content>
           <Footer style={{ padding: 0 }}>
-            <GlobalFooter
-              // links={[
-              //   {
-              //     key: 'Pro 首页',
-              //     title: 'Pro 首页',
-              //     href: 'http://pro.ant.design',
-              //     blankTarget: true,
-              //   },
-              //   {
-              //     key: 'github',
-              //     title: <Icon type="github" />,
-              //     href: 'https://github.com/ant-design/ant-design-pro',
-              //     blankTarget: true,
-              //   },
-              //   {
-              //     key: 'Ant Design',
-              //     title: 'Ant Design',
-              //     href: 'http://ant.design',
-              //     blankTarget: true,
-              //   },
-              // ]}
-              // copyright={
-              //   <Fragment>
-              //     Copyright <Icon type="copyright" /> 2018 蚂蚁金服体验技术部出品
-              //   </Fragment>
-              // }
-            />
+            <GlobalFooter />
           </Footer>
         </Layout>
       </Layout>
@@ -270,9 +220,7 @@ class BasicLayout extends React.PureComponent {
   }
 }
 
-export default connect(({ user, global, loading }) => ({
+export default connect(({ user, global }) => ({
   currentUser: user.currentUser,
   collapsed: global.collapsed,
-  fetchingNotices: loading.effects['global/fetchNotices'],
-  notices: global.notices,
 }))(BasicLayout);

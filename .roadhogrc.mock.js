@@ -135,6 +135,254 @@ const proxy = {
       path: '/base/category/list',
     });
   },
+  'POST /login/in': (req, res) => {
+    res.status(200).send({
+      status: 0,
+      msg: '',
+      data: {
+        type: 2,
+      },
+    });
+  },
+  'GET /customer/getCustomerList': (req, res) => {
+    res.status(200).send({
+      status: 0,
+      msg: '',
+      data: {
+        items: [
+          {
+            id: '1',
+            name: '客户1',
+            distance: 23443,
+          },
+          {
+            id: '2',
+            name: '客户2',
+            distance: 34643,
+          },
+        ],
+        total: 2,
+      },
+    });
+  },
+  'GET /gas/getGasList': (req, res) => {
+    res.status(200).send({
+      status: 0,
+      msg: '',
+      data: {
+        items: [
+          {
+            id: '1',
+            name: '天然气A',
+          },
+          {
+            id: '2',
+            name: '天然气B',
+          },
+          {
+            id: '3',
+            name: '天然气C',
+          },
+        ],
+        total: 3,
+      },
+    });
+  },
+  'GET /user/getUserList': (req, res) => {
+    res.status(200).send({
+      status: 0,
+      msg: '',
+      data: {
+        items: [
+          {
+            id: '1',
+            username: '张三',
+            password: 'xxxxx',
+            auth: '普通权限',
+            adminitor: '系统',
+          },
+          {
+            id: '5',
+            username: '李四',
+            password: 'xxxxx',
+            auth: '普通权限',
+            adminitor: '',
+          },
+        ],
+        total: 2,
+      },
+    });
+  },
+  'GET /user/getUserInfo': (req, res) => {
+    res.status(200).send({
+      status: 0,
+      msg: '',
+      data: {
+        name: '你最美',
+      },
+    });
+  },
+  'GET /sale/save': (req, res) => {
+    res.status(200).send({
+      status: 0,
+      msg: '',
+      data: '126',
+    });
+  },
+  'GET /sale/getSaleDetail': (req, res) => {
+    res.status(200).send({
+      status: 0,
+      msg: '',
+      data: {
+        fee: 2,
+        gasInfo: [
+          {
+            gasId: 1,
+            volume: 100,
+            priceType: 1,
+            price: 2.5,
+          },
+          {
+            gasId: 2,
+            volume: 104,
+            priceType: 2,
+            price: [{ start: 1, end: 50, price: 2 }, { start: 51, end: 100, price: 2.5 }],
+          },
+        ],
+      },
+    });
+  },
+  'GET /purchase/save': (req, res) => {
+    res.status(200).send({
+      status: 0,
+      msg: '',
+      data: '12',
+    });
+  },
+  'GET /report/basic': (req, res) => {
+    res.status(200).send({
+      status: 0,
+      msg: '',
+      data: [
+        {
+          username: 'A',
+          gas: [
+            {
+              label: '天然气A',
+              volume: 100,
+            },
+            {
+              label: '天然气B',
+              volume: 100,
+            },
+            {
+              label: '天然气C',
+              volume: 0,
+            },
+          ],
+          fee: '2',
+        },
+        {
+          username: 'B',
+          gas: [
+            {
+              label: '天然气A',
+              volume: 100,
+            },
+            {
+              label: '天然气B',
+              volume: 0,
+            },
+            {
+              label: '天然气C',
+              volume: 0,
+            },
+          ],
+          fee: '3',
+        },
+      ],
+    });
+  },
+  'GET /report/overall': (req, res) => {
+    res.status(200).send({
+      status: 0,
+      msg: '',
+      data: [
+        {
+          username: 'A',
+          buyAveragePrice: 2.2525,
+          saleAveragePrice: 2.2525,
+          totalCost: 450.5,
+          totalFee: 400,
+          totalIncome: 450.5,
+        },
+        {
+          username: 'B',
+          buyAveragePrice: 2.5,
+          saleAveragePrice: 2.5,
+          totalCost: 250,
+          totalFee: 300,
+          totalIncome: 250,
+        },
+        {
+          username: 'C',
+          buyAveragePrice: 2.5,
+          saleAveragePrice: 2.5,
+          totalCost: 250,
+          totalFee: 300,
+          totalIncome: 250,
+        },
+      ],
+    });
+  },
+  'GET /report/query': (req, res) => {
+    res.status(200).send({
+      status: 0,
+      msg: '',
+      data: [
+        {
+          username: 'A',
+          gas: [
+            {
+              label: '天然气A',
+              volume: 100,
+            },
+            {
+              label: '天然气B',
+              volume: 100,
+            },
+            {
+              label: '天然气C',
+              volume: 0,
+            },
+          ],
+          totalFee: 400,
+          totalVolume: 200,
+          totalProfit: 0,
+        },
+        {
+          username: 'B',
+          gas: [
+            {
+              label: '天然气A',
+              volume: 100,
+            },
+            {
+              label: '天然气B',
+              volume: 0,
+            },
+            {
+              label: '天然气C',
+              volume: 0,
+            },
+          ],
+          totalFee: 300,
+          totalVolume: 100,
+          totalProfit: 0,
+        },
+      ],
+    });
+  },
 };
 
 export default (noProxy ? {} : delay(proxy, 1000));

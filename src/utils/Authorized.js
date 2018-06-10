@@ -1,11 +1,13 @@
 import RenderAuthorized from '../components/Authorized';
-import { getAuthority } from './authority';
+import { getCookie } from './utils';
 
-let Authorized = RenderAuthorized(getAuthority()); // eslint-disable-line
+const authType = getCookie('type') || 'guest';
+let Authorized = RenderAuthorized(authType); // eslint-disable-line
 
 // Reload the rights component
 const reloadAuthorized = () => {
-  Authorized = RenderAuthorized(getAuthority());
+  const authTypeLatest = getCookie('type') || 'guest';
+  Authorized = RenderAuthorized(authTypeLatest);
 };
 
 export { reloadAuthorized };

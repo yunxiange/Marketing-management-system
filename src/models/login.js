@@ -1,29 +1,39 @@
 import { routerRedux } from 'dva/router';
-import { fakeAccountLogin } from '../services/api';
-import { setAuthority } from '../utils/authority';
+import { checkUser, loginOut } from '../services/login';
 import { reloadAuthorized } from '../utils/Authorized';
 
 export default {
   namespace: 'login',
 
   state: {
-    status: undefined,
+    currentAuthority: 'guest',
+    // status指代登录状态，true已登录false未登录
+    status: false,
+    // 已登录状态下是否正常，0正常1不正常，默认正常
+    type: 0,
   },
 
   effects: {
     *login({ payload }, { call, put }) {
-      const response = yield call(fakeAccountLogin, payload);
+      const response = yield call(checkUser, payload);
+      const currentAuthority =
+        +response.status === 0 ? (+response.data.type === 2 ? 'admin' : 'user') : 'guest';
       yield put({
         type: 'changeLoginStatus',
-        payload: response,
+        payload: {
+          currentAuthority,
+          status: true,
+          type: response.status,
+        },
       });
       // Login successfully
-      if (response.status === 'ok') {
-        reloadAuthorized();
+      if (response.status === 0) {
+        reloadAuthorized(currentAuthority);
         yield put(routerRedux.push('/'));
       }
     },
-    *logout(_, { put, select }) {
+    *logout(_, { call, put, select }) {
+      yield call(loginOut);
       try {
         // get location pathname
         const urlParams = new URL(window.location.href);
@@ -39,7 +49,7 @@ export default {
             currentAuthority: 'guest',
           },
         });
-        reloadAuthorized();
+        reloadAuthorized('guest');
         yield put(routerRedux.push('/user/login'));
       }
     },
@@ -47,9 +57,9 @@ export default {
 
   reducers: {
     changeLoginStatus(state, { payload }) {
-      setAuthority(payload.currentAuthority);
       return {
         ...state,
+        currentAuthority: payload.currentAuthority,
         status: payload.status,
         type: payload.type,
       };

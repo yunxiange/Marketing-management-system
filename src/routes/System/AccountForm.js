@@ -1,20 +1,23 @@
 import React, { PureComponent, Fragment } from 'react';
-import { Table, Button, Input, message, Popconfirm, Divider } from 'antd';
+import { Table, Button, Input, Select, message, Popconfirm, Divider} from 'antd';
 import styles from '../Forms/style.less';
 
-export default class CustomerForm extends PureComponent {
+const { Option } = Select;
+
+export default class AccountForm extends PureComponent {
   constructor(props) {
     super(props);
 
     this.state = {
       data: props.value,
-      loading: false,
+      loading: props.loading
     };
   }
   componentWillReceiveProps(nextProps) {
     if ('value' in nextProps) {
       this.setState({
         data: nextProps.value,
+        loading: nextProps.loading
       });
     }
   }
@@ -39,15 +42,16 @@ export default class CustomerForm extends PureComponent {
   remove(key) {
     const newData = this.state.data.filter(item => item.key !== key);
     this.setState({ data: newData });
-    //this.props.onChange(newData);
-    //remove todo..
+    this.props.onDelItem(key);
   }
   newCustomer = () => {
     const newData = this.state.data.map(item => ({ ...item }));
     newData.push({
       key: `NEW_TEMP_ID_${this.index}`,
-      name: '',
-      distance: 0,
+      username: '',
+      password: '',
+      auth: '1',
+      adminitor: '',
       editable: true,
       isNew: true,
     });
@@ -65,35 +69,34 @@ export default class CustomerForm extends PureComponent {
     if (target) {
       target[fieldName] = e.target.value;
       this.setState({ data: newData });
+    }   
+  }
+  handleSelectChange(value, fieldName, key) {
+    const newData = this.state.data.map(item => ({ ...item }));
+    const target = this.getRowByKey(key, newData);
+    if (target) {
+      target[fieldName] = value;
+      this.setState({ data: newData });
     }
   }
   saveRow(e, key) {
     e.persist();
-    this.setState({
-      loading: true,
-    });
-    setTimeout(() => {
-      if (this.clickedCancel) {
-        this.clickedCancel = false;
-        return;
-      }
-      const target = this.getRowByKey(key) || {};
-      if (!target.name || target.distance == 0) {
-        message.error('请填写完整客户信息。');
-        e.target.focus();
-        this.setState({
-          loading: false,
-        });
-        return;
-      }
-      delete target.isNew;
-      this.toggleEditable(e, key);
-      //this.props.onChange(this.state.data);
-      //save
+    if (this.clickedCancel) {
+      this.clickedCancel = false;
+      return;
+    }
+    const target = this.getRowByKey(key) || {};
+    if (!target.username || !target.password || !target.auth) {
+      message.error('请填写完整账户信息。');
+      e.target.focus();
       this.setState({
         loading: false,
       });
-    }, 500);
+      return;
+    }
+    delete target.isNew;
+    this.toggleEditable(e, key);
+    this.props.onAddItem(target);
   }
   cancel(e, key) {
     this.clickedCancel = true;
@@ -111,28 +114,56 @@ export default class CustomerForm extends PureComponent {
   render() {
     const columns = [
       {
-        title: '客户姓名',
-        dataIndex: 'name',
-        key: 'name',
-        width: '40%',
+        title: '账户',
+        dataIndex: 'username',
+        key: 'username',
+        width: '20%',
         render: (text, record) => {
           if (record.editable) {
             return (
-              <Input value={text} autoFocus onChange={e => this.handleFieldChange(e, 'name', record.key)} onKeyPress={e => this.handleKeyPress(e, record.key)} placeholder="客户姓名" />
+              <Input value={text} autoFocus onChange={e => this.handleFieldChange(e, 'username', record.key)} onKeyPress={e => this.handleKeyPress(e, record.key)} placeholder="账户" />
             );
           }
           return text;
         },
       },
       {
-        title: '区间距离(km)',
-        dataIndex: 'distance',
-        key: 'distance',
+        title: '密码',
+        dataIndex: 'password',
+        key: 'password',
         width: '20%',
         render: (text, record) => {
           if (record.editable) {
             return (
-                <Input value={text} onChange={e => this.handleFieldChange(e, 'distance', record.key)} onKeyPress={e => this.handleKeyPress(e, record.key)} placeholder="区间距离" />
+              <Input type='text' value={text} onChange={e => this.handleFieldChange(e, 'password', record.key)} onKeyPress={e => this.handleKeyPress(e, record.key)} placeholder="密码" />
+            );
+          }
+          return <Input type='password' value={text} disabled />;
+        },
+      },
+      {
+        title: '账户权限',
+        dataIndex: 'auth',
+        key: 'authority',
+        width: '20%',
+        render: (text, record) => {
+          return (
+            <Select placeholder="账户权限" defaultValue={text} onChange={(value)=>{this.handleSelectChange(value, 'auth', record.key)}} disabled={!record.editable}>
+              <Option value="1">普通权限</Option>
+              <Option value="2">管理权限</Option>
+            </Select>
+          );
+        },
+      },
+      {
+        title: '负责人',
+        dataIndex: 'adminitor',
+        key: 'director',
+        width: '20%',
+        render: (text, record) => {
+          if (record.editable) {
+            return (
+                <Input value={text} onChange={e => this.handleFieldChange(e, 'adminitor', record.key)} onKeyPress={e => this.handleKeyPress(e, record.key)} placeholder="负责人" />
             );
           }
           return text;
@@ -182,7 +213,7 @@ export default class CustomerForm extends PureComponent {
       <Fragment>
         <Table loading={this.state.loading} columns={columns} dataSource={this.state.data} pagination={false} rowClassName={record => { return record.editable ?  styles.editable : ''; }} />
         <Button style={{ width: '100%', marginTop: 16, marginBottom: 8 }} type="dashed" onClick={this.newCustomer}  icon="plus" >
-          新增客户
+          新增账户
         </Button>
       </Fragment>
     );

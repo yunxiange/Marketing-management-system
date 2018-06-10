@@ -159,3 +159,21 @@ const reg = /(((^https?:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-
 export function isUrl(path) {
   return reg.test(path);
 }
+
+export function getCookie(cookieKey) {
+  const cookies = document.cookie;
+  const index = cookies.indexOf(cookieKey + '=');
+
+  if (index > -1) {
+    const start = index + cookieKey.length + 1;
+    let end = cookies.indexOf(';', start);
+    if (end === -1) {
+      end = cookies.length;
+    }
+
+    const cookieValue = cookies.slice(start, end);
+    return cookieValue;
+  }
+
+  return '';
+}

@@ -65,7 +65,12 @@ export default function request(url, options) {
     }
   }
 
-  return fetch(url, newOptions)
+  let targetUrl = url;
+  if (process.env.NODE_ENV === 'production') {
+    targetUrl = '/salesys' + url;
+  }
+
+  return fetch(targetUrl, newOptions)
     .then(checkStatus)
     .then(response => {
       if (newOptions.method === 'DELETE' || response.status === 204) {

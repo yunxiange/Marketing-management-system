@@ -72,12 +72,6 @@ export const getRouterData = app => {
     '/': {
       component: dynamicWrapper(app, ['user', 'login'], () => import('../layouts/BasicLayout')),
     },
-    // '/dashboard/analysis': {
-    //   component: dynamicWrapper(app, ['chart'], () => import('../routes/Dashboard/Analysis')),
-    // },
-    // '/dashboard/monitor': {
-    //   component: dynamicWrapper(app, ['monitor'], () => import('../routes/Dashboard/Monitor')),
-    // },
     // '/dashboard/workplace': {
     //   component: dynamicWrapper(app, ['project', 'activities', 'chart'], () =>
     //     import('../routes/Dashboard/Workplace')
@@ -86,83 +80,32 @@ export const getRouterData = app => {
     //   // name: '工作台',
     //   // authority: 'admin',
     // },
-    //-----------add by liuwh at 2018.04.29 begin------------------------------------------------------------
-    '/sale/saleDataInput': {
-      component: dynamicWrapper(app, ['user'], () => import('../routes/SaleManagement/SaleDataInputPage')),
+    // -----------add by liuwh at 2018.04.29 begin------------------------------------------------------------
+    '/sale/new': {
+      component: dynamicWrapper(app, ['user'], () => import('../routes/Sale/SaleNew')),
     },
-    '/sale/saleDataUpdate': {
-      component: dynamicWrapper(app, ['user'], () => import('../routes/SaleManagement/SaleDataUpdatePage')),
+    '/sale/edit': {
+      component: dynamicWrapper(app, ['user'], () => import('../routes/Sale/SaleEdit')),
     },
-    '/systemManagement/accountManagement': {
-      component: dynamicWrapper(app, ['user'], () => import('../routes/SystemManagement/AccountPage')),
+    '/system/account': {
+      component: dynamicWrapper(app, ['user'], () => import('../routes/System/SystemAccount')),
     },
-    '/systemManagement/customerManagement': {
-      component: dynamicWrapper(app, ['user'], () => import('../routes/SystemManagement/CustomerPage')),
+    '/system/customer': {
+      component: dynamicWrapper(app, ['user'], () => import('../routes/System/SystemCustomer')),
     },
-    '/basicPage': {
-      component: dynamicWrapper(app, ['rule'], () => import('../routes/ReportManagement/BasicDataPage')),
+    '/report/basic': {
+      component: dynamicWrapper(app, ['rule'], () => import('../routes/Report/ReportBasic')),
     },
-    '/search': {
-      component: dynamicWrapper(app, ['rule'], () => import('../routes/ReportManagement/QueryDataPage')),
+    '/report/query': {
+      component: dynamicWrapper(app, ['rule'], () => import('../routes/Report/ReportQuery')),
     },
-    '/overallPage': {
-      component: dynamicWrapper(app, ['rule'], () => import('../routes/ReportManagement/OverallPage')),
-    },    
-    '/purchase/purchaseDataInput': {
-      component: dynamicWrapper(app, ['user'], () => import('../routes/PurchaseManagement/PurchaseDataInputPage')),
+    '/report/overall': {
+      component: dynamicWrapper(app, ['rule'], () => import('../routes/Report/ReportOverall')),
     },
-    //-----------add by liuwh at 2018.04.29 end  ------------------------------------------------------------
-    
-    '/form/basic-form': {
-      component: dynamicWrapper(app, ['form'], () => import('../routes/Forms/BasicForm')),
+    '/purchase/new': {
+      component: dynamicWrapper(app, ['user'], () => import('../routes/Purchase/PurchaseNew')),
     },
-    '/form/step-form': {
-      component: dynamicWrapper(app, ['form'], () => import('../routes/Forms/StepForm')),
-    },
-    '/form/step-form/info': {
-      name: '分步表单（填写转账信息）',
-      component: dynamicWrapper(app, ['form'], () => import('../routes/Forms/StepForm/Step1')),
-    },
-    '/form/step-form/confirm': {
-      name: '分步表单（确认转账信息）',
-      component: dynamicWrapper(app, ['form'], () => import('../routes/Forms/StepForm/Step2')),
-    },
-    '/form/step-form/result': {
-      name: '分步表单（完成）',
-      component: dynamicWrapper(app, ['form'], () => import('../routes/Forms/StepForm/Step3')),
-    },
-    '/form/advanced-form': {
-      component: dynamicWrapper(app, ['form'], () => import('../routes/Forms/AdvancedForm')),
-    },
-    '/list/table-list': {
-      component: dynamicWrapper(app, ['rule'], () => import('../routes/List/TableList')),
-    },
-    '/list/basic-list': {
-      component: dynamicWrapper(app, ['list'], () => import('../routes/List/BasicList')),
-    },
-    '/list/card-list': {
-      component: dynamicWrapper(app, ['list'], () => import('../routes/List/CardList')),
-    },
-    '/list/search': {
-      component: dynamicWrapper(app, ['list'], () => import('../routes/List/List')),
-    },
-    '/list/search/projects': {
-      component: dynamicWrapper(app, ['list'], () => import('../routes/List/Projects')),
-    },
-    '/list/search/applications': {
-      component: dynamicWrapper(app, ['list'], () => import('../routes/List/Applications')),
-    },
-    '/list/search/articles': {
-      component: dynamicWrapper(app, ['list'], () => import('../routes/List/Articles')),
-    },
-    '/profile/basic': {
-      component: dynamicWrapper(app, ['profile'], () => import('../routes/Profile/BasicProfile')),
-    },
-    '/profile/advanced': {
-      component: dynamicWrapper(app, ['profile'], () =>
-        import('../routes/Profile/AdvancedProfile')
-      ),
-    },
+    // -----------add by liuwh at 2018.04.29 end  ------------------------------------------------------------
     '/result/success': {
       component: dynamicWrapper(app, [], () => import('../routes/Result/Success')),
     },
@@ -195,9 +138,6 @@ export const getRouterData = app => {
     '/user/register-result': {
       component: dynamicWrapper(app, [], () => import('../routes/User/RegisterResult')),
     },
-    // '/user/:id': {
-    //   component: dynamicWrapper(app, [], () => import('../routes/User/SomeComponent')),
-    // },
   };
   // Get name from ./menu.js or just set it in the router data.
   const menuData = getFlatMenuData(getMenuData());
